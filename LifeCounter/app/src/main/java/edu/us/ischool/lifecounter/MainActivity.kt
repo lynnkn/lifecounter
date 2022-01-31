@@ -3,6 +3,7 @@ package edu.us.ischool.lifecounter
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -21,6 +22,7 @@ class RowHolder(row: View) : RecyclerView.ViewHolder(row) {
     var mFive: Button? = null
 
     var template: String? = null
+    var lifeTotal = 20
 
     init {
         playerLabel = row.findViewById<Button>(R.id.playerLabel)
@@ -38,13 +40,25 @@ class RowHolder(row: View) : RecyclerView.ViewHolder(row) {
     fun bindModel(item: String) {
         // playerLabel is nullable so have to put !!
         playerLabel!!.text = item
-        lifeLabel!!.text = String.format(template!!, 20)
+        lifeLabel!!.text = String.format(template!!, lifeTotal)
     }
 }
 
 class MainActivity : AppCompatActivity() {
     // field variables
     private lateinit var playerList: RecyclerView
+    var loserText = findViewById<TextView>(R.id.loserText)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // bind adapter to the RecyclerView
+        playerList = findViewById<RecyclerView>(R.id.playerList)
+        val adapter = IconicAdapter(this)
+        playerList.adapter = adapter
+        playerList.layoutManager = LinearLayoutManager(this);
+    }
 
     class IconicAdapter(val activity: Activity) : RecyclerView.Adapter<RowHolder>() {
         private val playerLabels = arrayOf("Player 1", "Player 2", "Player 3", "Player 4")
@@ -62,19 +76,36 @@ class MainActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: RowHolder, position: Int) {
             // asks row holder to bind this data into its UI
             holder.bindModel(playerLabels[position])
+
+            // setting button listeners
+            holder.pOne?.setOnClickListener{
+                holder.lifeTotal++
+                holder.lifeLabel?.text = String.format(holder.template!!, holder.lifeTotal)
+                if (holder.lifeTotal <= 0) {
+                    Log.i("TASKS", "${playerLabels[position]} loses")
+                }
+            }
+            holder.mOne?.setOnClickListener{
+                holder.lifeTotal--
+                holder.lifeLabel?.text = String.format(holder.template!!, holder.lifeTotal)
+                if (holder.lifeTotal <= 0) {
+                    Log.i("TASKS", "${playerLabels[position]} loses")
+                }
+            }
+            holder.pFive?.setOnClickListener{
+                holder.lifeTotal += 5
+                holder.lifeLabel?.text = String.format(holder.template!!, holder.lifeTotal)
+                if (holder.lifeTotal <= 0) {
+                    Log.i("TASKS", "${playerLabels[position]} loses")
+                }
+            }
+            holder.mFive?.setOnClickListener{
+                holder.lifeTotal -= 5
+                holder.lifeLabel?.text = String.format(holder.template!!, holder.lifeTotal)
+                if (holder.lifeTotal <= 0) {
+                    Log.i("TASKS", "${playerLabels[position]} loses")
+                }
+            }
         }
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // bind adapter to the RecyclerView
-        playerList = findViewById<RecyclerView>(R.id.playerList)
-        val adapter = IconicAdapter(this)
-        playerList.adapter = adapter
-        playerList.layoutManager = LinearLayoutManager(this);
-    }
-
-
 }
