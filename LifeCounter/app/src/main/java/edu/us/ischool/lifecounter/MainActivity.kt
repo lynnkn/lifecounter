@@ -47,20 +47,9 @@ class RowHolder(row: View) : RecyclerView.ViewHolder(row) {
 class MainActivity : AppCompatActivity() {
     // field variables
     private lateinit var playerList: RecyclerView
-    var loserText = findViewById<TextView>(R.id.loserText)
+    lateinit var loserText : TextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // bind adapter to the RecyclerView
-        playerList = findViewById<RecyclerView>(R.id.playerList)
-        val adapter = IconicAdapter(this)
-        playerList.adapter = adapter
-        playerList.layoutManager = LinearLayoutManager(this);
-    }
-
-    class IconicAdapter(val activity: Activity) : RecyclerView.Adapter<RowHolder>() {
+    inner class IconicAdapter(val activity: Activity) : RecyclerView.Adapter<RowHolder>() {
         private val playerLabels = arrayOf("Player 1", "Player 2", "Player 3", "Player 4")
 
         override fun getItemCount() : Int { return playerLabels.size }
@@ -82,30 +71,55 @@ class MainActivity : AppCompatActivity() {
                 holder.lifeTotal++
                 holder.lifeLabel?.text = String.format(holder.template!!, holder.lifeTotal)
                 if (holder.lifeTotal <= 0) {
-                    Log.i("TASKS", "${playerLabels[position]} loses")
+                    changeLoserText("${playerLabels[position]} LOSES!")
+                } else {
+                    changeLoserText("")
                 }
             }
             holder.mOne?.setOnClickListener{
                 holder.lifeTotal--
                 holder.lifeLabel?.text = String.format(holder.template!!, holder.lifeTotal)
                 if (holder.lifeTotal <= 0) {
-                    Log.i("TASKS", "${playerLabels[position]} loses")
+                    changeLoserText("${playerLabels[position]} LOSES!")
+                } else {
+                    changeLoserText("")
                 }
             }
             holder.pFive?.setOnClickListener{
                 holder.lifeTotal += 5
                 holder.lifeLabel?.text = String.format(holder.template!!, holder.lifeTotal)
                 if (holder.lifeTotal <= 0) {
-                    Log.i("TASKS", "${playerLabels[position]} loses")
+                    changeLoserText("${playerLabels[position]} LOSES!")
+                } else {
+                    changeLoserText("")
                 }
             }
             holder.mFive?.setOnClickListener{
                 holder.lifeTotal -= 5
                 holder.lifeLabel?.text = String.format(holder.template!!, holder.lifeTotal)
                 if (holder.lifeTotal <= 0) {
-                    Log.i("TASKS", "${playerLabels[position]} loses")
+                    changeLoserText("${playerLabels[position]} LOSES!")
+                } else {
+                    changeLoserText("")
                 }
             }
         }
+
+        fun changeLoserText(message: String) : Unit {
+            loserText.text = message
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        loserText = findViewById<TextView>(R.id.loserText)
+
+        // bind adapter to the RecyclerView
+        playerList = findViewById<RecyclerView>(R.id.playerList)
+        val adapter = IconicAdapter(this)
+        playerList.adapter = adapter
+        playerList.layoutManager = LinearLayoutManager(this);
     }
 }

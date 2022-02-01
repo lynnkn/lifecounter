@@ -7,23 +7,38 @@
     android:background="@color/grey"
     tools:context=".MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/playerList"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="-16dp">
+        android:layout_height="match_parent">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/playerList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="-16dp">
 
-    <TextView
-        android:id="@+id/loserText"
-        android:layout_width= "match_parent"
-        android:layout_height= "wrap_content"
-        android:layout_alignParentBottom= "true"
-        android:gravity= "center"
-        android:padding= "16dp"
-        android:text=""
-        android:textSize="20dp" />
+        </androidx.recyclerview.widget.RecyclerView>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/loserText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingBottom="24dp"
+            android:text=""
+            android:textSize="20dp" />
+
+    </RelativeLayout>
+
+
 </RelativeLayout>
